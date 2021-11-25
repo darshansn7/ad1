@@ -1,0 +1,43 @@
+---
+- hosts: all  ##same as elasticsearch
+  strategy: debug
+  gather_facts: yes
+  become: yes
+  become_method: sudo
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: create aipuser
+    shell: useradd aipuser 
+
+  - name: Copy Saga
+    copy:
+      src: "{{ item.src }}" 
+      dest: "{{ item.dest }}"
+    with_items:    
+      - src: files/services/saga.service
+        dest: /etc/systemd/system/
+    tags: copysaga
+
+  - name: Create dir
+    ansible.builtin.file:
+      path: /data01/
+      state: directory
+      mode: '0755'
+
+  - name: Extract Saga
+    unarchive:
+      src: /tmp/{{ saga_download_url }}
+      dest: /data01/
+      owner: root
+      group: root
+      mode: '0755'
+      remote_src: yes
+
+  - name: Just force systemd to reread configs (2.4 and above)
+    ansible.builtin.systemd:
+      daemon_reload: yes
+
+  - name : shell
+    shell: systemctl start saga

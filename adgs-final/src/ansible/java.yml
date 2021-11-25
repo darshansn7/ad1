@@ -1,0 +1,11 @@
+- name: Install java
+  hosts: all
+  gather_facts: true
+  become: true
+  become_method: sudo 
+
+  tasks:
+  - name: install java 
+    yum: name=/tmp/jdk-11.0.12_linux-x64_bin.rpm state=present
+
+

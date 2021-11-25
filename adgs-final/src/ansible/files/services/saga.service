@@ -1,0 +1,14 @@
+Unit]
+Description=Saga Service for Aspire
+After=elasticsearch.service
+[Service]
+User=root
+Group=root
+Type=simple
+WorkingDirectory=/data01/Saga_Server/bin
+ExecStart=/data01/Saga_Server/bin/startup.sh -startup
+ExecStop=/data01/Saga_Server/bin/startup.sh -sd
+PIDFile=/data01/Saga_Server/bin/saga.pid
+TimeoutStartSec=0
+[Install]
+WantedBy=multi-user.target

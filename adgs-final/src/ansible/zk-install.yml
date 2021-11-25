@@ -1,0 +1,38 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  vars_files:
+    - vars.yml
+
+  tasks:
+  - name: download zookeeper
+    unarchive:
+      src: /tmp/{{ zookeeper_download_link }}
+      dest: /opt/
+      mode: '0755'
+      remote_src: yes
+
+  - name: add zookeeper config
+    copy:
+      src: files/config/zoo.cfg
+      dest: /opt/apache-zookeeper-3.5.6-bin/conf/zoo.cfg
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: add startup script
+    copy:
+      src: files/services/zookeeper.service
+      dest: /etc/systemd/system/zookeeper.service
+      owner: root
+      group: root
+      mode: '0644'
+
+
+  - name: start zookeeper
+    systemd:
+      name: zookeeper.service
+      state: started
+      enabled: yes

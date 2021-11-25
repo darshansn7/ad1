@@ -1,0 +1,73 @@
+---
+- hosts: all
+  become: yes
+  become_method: sudo
+  gather_facts: no
+  vars_files:
+    - vars.yml
+    
+  tasks:
+  - name: create aipuser
+    shell: useradd aipuser 
+
+  - name: instal xml
+    yum: name=/tmp/python-lxml-3.2.1-4.el7.x86_64.rpm state=present
+    
+  - name: Create dir
+    ansible.builtin.file:
+      path: /data01/
+      state: directory
+      mode: '0755'
+
+  - name: download aspire
+    ansible.builtin.unarchive:
+      src: /tmp/{{ aspire_download_url }}
+      dest: /data01/
+      mode: '0755'
+      remote_src: yes
+    tags: unzip
+  
+  - name: Change ownership
+    ansible.builtin.file:
+      path: /data01/
+      state: directory
+      recurse: yes
+      owner: aipuser
+      group: aipuser
+
+  - name: Set the zookeeper host
+    community.general.xml:
+      path: /data01/aspire-4.0-SNAPSHOT/config/settings.xml
+      xpath: '/settings/configAdministration/zookeeper/externalServer'
+      value: '{{ zookeeper }}:2181'
+    tags: xml1
+
+  - name: Set the Master
+    community.general.xml:
+      path: /data01/aspire-4.0-SNAPSHOT/config/settings.xml
+      xpath: '/settings/configAdministration/zookeeper/first'
+      value: 'false'
+    tags: xml2
+
+  - name: Set the elasticsearch host
+    community.general.xml:
+      path: /data01/aspire-4.0-SNAPSHOT/config/settings.xml
+      xpath: '/settings/noSQLConnectionProvider/url'
+      value: 'http://{{ elasticsearch }}:9200'
+    tags: xml3
+
+
+  - name: add startup script
+    copy:
+      src: files/services/aspire.service
+      dest: /etc/systemd/system/aspire.service
+      owner: root
+      group: root
+      mode: '0644'
+
+
+  - name: start aspire
+    systemd:
+      name: aspire.service
+      state: started
+      enabled: yes

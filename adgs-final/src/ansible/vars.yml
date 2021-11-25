@@ -1,0 +1,7 @@
+---
+zookeeper: aipuser1
+elasticsearch: aipuser1
+aspire_download_url: "aspire-4.0-SNAPSHOT.tar.gz"
+saga_download_url: "Saga_Server.zip"
+elastic_data_url: "elasticsearch-7.2.1-x86_64.rpm"
+zookeeper_download_link: "apache-zookeeper-3.5.6-bin.tar.gz" 

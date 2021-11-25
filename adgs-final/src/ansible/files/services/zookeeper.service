@@ -1,0 +1,13 @@
+[Unit]
+Description=Description for sample script goes here
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/apache-zookeeper-3.5.6-bin/bin/zkServer.sh start
+TimeoutStartSec=0
+WorkingDirectory=/opt/apache-zookeeper-3.5.6-bin
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

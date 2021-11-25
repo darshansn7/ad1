@@ -1,0 +1,72 @@
+---
+- hosts: all
+  strategy: debug
+  gather_facts: yes
+  become: yes
+  become_method: sudo
+  vars_files:
+    - vars.yml
+
+  tasks: 
+  - name: add repo file
+    copy:
+      src: files/config/elasticsearch.repo
+      dest: /etc/yum.repos.d/
+      owner: root
+      group: root
+      mode: '0644'
+
+  # - name: add GPG key
+  #   command: rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+  - name: install elasticsearch from copied rpm
+    yum: name=/tmp/{{ elastic_data_url }} state=present
+
+
+  - name: Creates directory
+    file:
+      path: /data01/elasticsearch
+      state: directory
+      owner: elasticsearch
+      group: elasticsearch
+      mode: '0755'
+      recurse: no
+ 
+  - name: Creates directory
+    file:
+      path: /data01/elasticsearch/nodes
+      state: directory
+      owner: elasticsearch
+      group: elasticsearch
+      mode: '0755'
+      recurse: yes
+
+ 
+  - name: replace a line in a file
+    lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      state: present
+      regexp: '^path.data: /var/lib/elasticsearch'
+      line: 'path.data: /data01/elasticsearch'
+      backrefs: yes
+    tags: r1
+
+  - name: Add a line to a file
+    ansible.builtin.lineinfile:
+      path: /etc/elasticsearch/elasticsearch.yml
+      line: '{{ item }}'
+    with_items:   
+      - 'discovery.type: single-node'
+      - 'network.host: 0.0.0.0'
+    tags: elasticfile
+
+  - name: Systemd
+    ansible.builtin.systemd:
+      name: elasticsearch
+      state: started
+      enabled: yes
+
+      #  - name: var test
+      #    shell:
+      #      /bin/echo {{ zookeeper }} >> '/tmp/test'
+      #    tags: testvar

@@ -137,6 +137,58 @@ variable "common_tags" {
 }
 
 #############################################################################
+####################       managed disk           #########################
+#############################################################################
+
+variable "managed_disk_config" {
+  type = set(object(
+    {
+      name                 = string
+      storage_account_type = string
+      disk_size_gb         = number
+      lun                  = string
+      caching              = string
+
+    }
+  ))
+  default = [
+
+    {
+      name                 = "di1"
+      storage_account_type = "Standard_LRS"
+      disk_size_gb         = 10
+      lun                  = "10"
+      caching              = "ReadWrite"
+  }]
+}
+#############################################################################
+####################       network security group   #########################
+#############################################################################
+variable "network_security_group_name" {
+  type = string
+  default = ""
+}
+
+
+variable "security_rule" {
+  description = "security rules for the network security group"
+  type = set(object(
+    {
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    }
+  ))
+  default = []
+}
+
+#############################################################################
 ####################                #key            #########################
 #############################################################################
 variable "vm_private_key" {
@@ -237,27 +289,6 @@ variable "managed_disk_required" {
 }
 
 
-variable "managed_disk_config" {
-  type = set(object(
-    {
-      name                 = string
-      storage_account_type = string
-      disk_size_gb         = number
-      lun                  = string
-      caching              = string
-
-    }
-  ))
-  default = [
-
-    {
-      name                 = "di1"
-      storage_account_type = "Standard_LRS"
-      disk_size_gb         = 10
-      lun                  = "10"
-      caching              = "ReadWrite"
-  }]
-}
 
 #backup
 variable "recovery_services_vault_name" {
@@ -296,21 +327,3 @@ variable "retention_daily_count" {
   type = string
 }
 
-
-variable "security_rule" {
-  description = "security rules for the network security group"
-  type = set(object(
-    {
-      name                       = string
-      priority                   = number
-      direction                  = string
-      access                     = string
-      protocol                   = string
-      source_port_range          = string
-      destination_port_range     = string
-      source_address_prefix      = string
-      destination_address_prefix = string
-    }
-  ))
-  default = []
-}

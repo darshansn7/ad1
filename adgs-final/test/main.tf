@@ -38,10 +38,14 @@ module "vm1" {
   vm_computer_name                = "aipuser1"
   vm_admin_username               = "aipuser1"
 
-  network_security_group_required = false
-  ansible_required                = false
   managed_disk_required           = false
   managed_disk_config             = var.managed_disk_config
+
+  network_security_group_required = false
+  network_security_group_name = local.network_security_group_name
+  security_rule = var.security_rule
+  ansible_required                = false
+
   #ansible
   vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
   playbooks               = ["java.yml", "zk-install.yml"]
@@ -70,3 +74,32 @@ module "vm1" {
   soft_delete_enabled            = true
 }
 
+
+variable "security_rule" {
+  description = "security rules for the network security group"
+  type = set(object(
+    {
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    }
+  ))
+  default = [{
+    name                       = "zookeeper"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "2181"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+
+  }]
+}

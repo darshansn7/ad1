@@ -41,7 +41,7 @@ resource "local_file" "playbooks" {
 }
 
 variable "playbooks" {
-    type =string
+    type =list(string)
 }
 
 variable "zookeeper_host_name" {

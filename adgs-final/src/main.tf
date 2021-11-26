@@ -83,6 +83,7 @@ module "vm_backup" {
   backup_frequency               = var.backup_frequency
   backup_time                    = var.backup_time
   retention_daily_count          = var.retention_daily_count
+  virtual_machine_id = azurerm_linux_virtual_machine.linux_vm.id
 }
 module "ansible" {
   source                  = "./ansibletf"

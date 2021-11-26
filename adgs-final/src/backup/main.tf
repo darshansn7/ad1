@@ -31,8 +31,11 @@ resource "azurerm_backup_policy_vm" "main" {
 resource "azurerm_backup_protected_vm" "main" {
   resource_group_name = var.vm_rg
   recovery_vault_name = azurerm_recovery_services_vault.main.name
-  source_vm_id        = azurerm_linux_virtual_machine.linux_vm.id
+  source_vm_id        = var.virtual_machine_id
   backup_policy_id    = azurerm_backup_policy_vm.main.id
   depends_on          = [azurerm_backup_policy_vm.main]
 }
 
+variable "virtual_machine_id" {
+    type = string
+}

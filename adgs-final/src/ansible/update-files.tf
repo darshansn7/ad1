@@ -40,16 +40,21 @@ resource "local_file" "playbooks" {
   content  = data.template_file.playbooks.template
 }
 
-variable "playbooks" {
-  type = list(string)
+#############################################################################
+####################     update hosts  #################################
+#############################################################################
+data "template_file" "hosts" {
+template = <<EOF
+[default]
+${var.vm_private_ip_address}
+[default:vars]
+ansible_user=${var.vm_admin_username}
+ansible_password=${var.vm_password}
+EOF
 }
 
-variable "zookeeper_host_name" {
-  type = string
+resource "local_file" "hosts" {
+  filename = "${path.module}/inventory/hosts"
+  content  = data.template_file.hosts.template
 }
-
-variable "elasticsearch_host_name" {
-  type = string
-}
-
 

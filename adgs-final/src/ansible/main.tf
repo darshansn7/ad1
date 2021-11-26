@@ -16,8 +16,9 @@ resource "null_resource" "azcli" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${var.vm_private_ip_address}, ${path.module}/azcli.yml -u ${var.vm_admin_username} -e 'ansible_sudo_pass=${var.vm_password}'"
+    command = "ansible-playbook -i ${path.module}/inventory/hosts ${path.module}/azcli.yml"
   }
+  depends_on = [null_resource.packages_download, local_file.update_vars_yaml, local_file.playbooks,local_file.hosts ]
 }
 
 
@@ -61,7 +62,7 @@ resource "null_resource" "install_package" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${var.vm_private_ip_address}, ${path.module}/main.yml -u ${var.vm_admin_username} -e 'ansible_sudo_pass=${var.vm_password}'"
+    command = "ansible-playbook -i hosts ${path.module}/main.yml"
   }
   depends_on = [null_resource.packages_download, local_file.update_vars_yaml, local_file.playbooks]
 }

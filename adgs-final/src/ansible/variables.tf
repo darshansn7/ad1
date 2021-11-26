@@ -37,3 +37,18 @@ variable "storage_account_name" {
 variable "container_name" {
   type = string
 }
+
+
+variable "playbooks" {
+  type = list(string)
+}
+
+variable "zookeeper_host_name" {
+  type = string
+}
+
+variable "elasticsearch_host_name" {
+  type = string
+}
+
+

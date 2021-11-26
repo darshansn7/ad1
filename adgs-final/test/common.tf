@@ -25,6 +25,7 @@ locals {
   vm1_key_name           = "${local.base_name_prefix}key1${local.base_name_suffix}"
   vm1_keyvault_vm_secret = "${local.base_name_prefix}secret1${local.base_name_suffix}"
   virtual_machine1_name  = "${local.base_name_prefix}vm1${local.base_name_suffix}"
+  network_security_group_name = "${local.base_name_prefix}nsg${local.base_name_suffix}"
 
   vm2_nic_name           = "${local.base_name_prefix}nic2${local.base_name_suffix}"
   vm2_key_name           = "${local.base_name_prefix}key2${local.base_name_suffix}"

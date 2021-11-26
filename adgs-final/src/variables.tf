@@ -164,6 +164,10 @@ variable "managed_disk_config" {
 #############################################################################
 ####################       network security group   #########################
 #############################################################################
+variable "network_security_group_required" {
+  type = bool
+}
+
 variable "network_security_group_name" {
   type = string
   default = ""

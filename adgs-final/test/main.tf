@@ -12,7 +12,7 @@ module "vm1" {
   vm_rg       = "aianoaddarrsg01"
   rg_location = "eastus2"
   vnet_name   = "aianoaddapvpc01"
-  subnet_name = "aianoaddazviz01"
+  subnet_name = "aianoaddaspvt01"
 
   #nic
   nic_name                          = local.vm1_nic_name
@@ -44,14 +44,15 @@ module "vm1" {
   network_security_group_required = false
   network_security_group_name = local.network_security_group_name
   security_rule = var.security_rule
-  ansible_required                = false
+
 
   #ansible
+    ansible_required                = true
   vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
   playbooks               = ["java.yml", "zk-install.yml"]
   zookeeper_host_name     = ""
   elasticsearch_host_name = ""
-  private_key             = "./${local.virtual_machine1_name}/${local.vm1_key_name}.pem"
+  private_key             = ""
   client_id               = var.client_id
   client_secret           = var.client_secret
   tenant_id               = var.tenant_id

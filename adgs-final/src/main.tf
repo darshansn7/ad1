@@ -42,15 +42,9 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   disable_password_authentication = false
   custom_data                     = var.custom_data
   tags                            = var.common_tags
+  depends_on = [module.network_security_group]
 }
 
-variable "network_security_group_required" {
-  type = bool
-}
-variable "network_security_group_name" {
-  type = string
-  default = ""
-}
 module "network_security_group" {
   source                      = "./nsg"
   count                       = var.network_security_group_required == true ? 1 : 0
@@ -87,6 +81,9 @@ module "ansible" {
   subscription_id       = var.subscription_id
   storage_account_name  = var.storage_account_name
   container_name        = var.container_name
+  zookeeper_host_name  = var.zookeeper_host_name
+  elasticsearch_host_name = var.elasticsearch_host_name
+  playbooks = var.playbooks
 }
 
 variable "ansible_required" {

@@ -83,10 +83,12 @@ module "vm_backup" {
   backup_frequency               = var.backup_frequency
   backup_time                    = var.backup_time
   retention_daily_count          = var.retention_daily_count
-  virtual_machine_id = azurerm_linux_virtual_machine.linux_vm.id
+  virtual_machine_id             = azurerm_linux_virtual_machine.linux_vm.id
+  depends_on                     = [azurerm_linux_virtual_machine.linux_vm, module.disk, module.ansible]
 }
+
 module "ansible" {
-  source                  = "./ansibletf"
+  source                  = "./ansible"
   count                   = var.ansible_required == true ? 1 : 0
   vm_private_ip_address   = azurerm_linux_virtual_machine.linux_vm.private_ip_address
   vm_admin_username       = var.vm_admin_username

@@ -13,8 +13,8 @@ EOF
 }
 
 resource "local_file" "update_vars_yaml" {
-  content    = data.template_file.vars_yaml.template
-  filename   = "${path.module}/vars.yml"
+  content  = data.template_file.vars_yaml.template
+  filename = "${path.module}/vars.yml"
 }
 
 
@@ -41,15 +41,15 @@ resource "local_file" "playbooks" {
 }
 
 variable "playbooks" {
-    type =list(string)
+  type = list(string)
 }
 
 variable "zookeeper_host_name" {
-    type =string
+  type = string
 }
 
 variable "elasticsearch_host_name" {
-    type =string
+  type = string
 }
 
 

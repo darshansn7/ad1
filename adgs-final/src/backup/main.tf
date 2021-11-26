@@ -37,5 +37,5 @@ resource "azurerm_backup_protected_vm" "main" {
 }
 
 variable "virtual_machine_id" {
-    type = string
+  type = string
 }

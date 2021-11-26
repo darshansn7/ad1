@@ -40,9 +40,9 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   admin_username                  = var.vm_admin_username
   admin_password                  = sensitive(random_password.password.result)
   disable_password_authentication = false
-  custom_data                     = var.custom_data
-  tags                            = var.common_tags
-  depends_on                      = [module.network_security_group]
+  #custom_data                     = var.custom_data
+  tags       = var.common_tags
+  depends_on = [module.network_security_group, null_resource.create_key_file, random_password.password, azurerm_ssh_public_key.main]
 }
 
 module "network_security_group" {
@@ -69,24 +69,6 @@ module "disk" {
 }
 
 
-module "vm_backup" {
-  source                         = "./backup"
-  count                          = var.vm_backup_required == true ? 1 : 0
-  recovery_services_vault_name   = var.recovery_services_vault_name
-  rg_location                    = var.rg_location
-  vm_rg                          = var.vm_rg
-  recovery_services_vault_sku    = var.recovery_services_vault_sku
-  soft_delete_enabled            = var.soft_delete_enabled
-  vm_backup_policy_name          = var.vm_backup_policy_name
-  time_zone                      = var.time_zone
-  instant_restore_retention_days = var.instant_restore_retention_days
-  backup_frequency               = var.backup_frequency
-  backup_time                    = var.backup_time
-  retention_daily_count          = var.retention_daily_count
-  virtual_machine_id             = azurerm_linux_virtual_machine.linux_vm.id
-  depends_on                     = [azurerm_linux_virtual_machine.linux_vm, module.disk, module.ansible]
-}
-
 module "ansible" {
   source                  = "./ansible"
   count                   = var.ansible_required == true ? 1 : 0
@@ -106,6 +88,21 @@ module "ansible" {
   depends_on              = [azurerm_linux_virtual_machine.linux_vm, module.disk]
 }
 
-variable "ansible_required" {
-  type = bool
+
+module "vm_backup" {
+  source                         = "./backup"
+  count                          = var.vm_backup_required == true ? 1 : 0
+  recovery_services_vault_name   = var.recovery_services_vault_name
+  rg_location                    = var.rg_location
+  vm_rg                          = var.vm_rg
+  recovery_services_vault_sku    = var.recovery_services_vault_sku
+  soft_delete_enabled            = var.soft_delete_enabled
+  vm_backup_policy_name          = var.vm_backup_policy_name
+  time_zone                      = var.time_zone
+  instant_restore_retention_days = var.instant_restore_retention_days
+  backup_frequency               = var.backup_frequency
+  backup_time                    = var.backup_time
+  retention_daily_count          = var.retention_daily_count
+  virtual_machine_id             = azurerm_linux_virtual_machine.linux_vm.id
+  depends_on                     = [azurerm_linux_virtual_machine.linux_vm, module.disk, module.ansible]
 }

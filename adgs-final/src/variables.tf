@@ -139,6 +139,10 @@ variable "common_tags" {
 #############################################################################
 ####################       managed disk           #########################
 #############################################################################
+variable "managed_disk_required" {
+  type    = bool
+  default = false
+}
 
 variable "managed_disk_config" {
   type = set(object(
@@ -152,7 +156,6 @@ variable "managed_disk_config" {
     }
   ))
   default = [
-
     {
       name                 = "di1"
       storage_account_type = "Standard_LRS"
@@ -165,12 +168,15 @@ variable "managed_disk_config" {
 ####################       network security group   #########################
 #############################################################################
 variable "network_security_group_required" {
-  type = bool
+  type        = bool
+  description = "network security group needed accepted values are true or false"
+  default     = false
 }
 
 variable "network_security_group_name" {
-  type    = string
-  default = ""
+  type        = string
+  description = "network security group name"
+  default     = ""
 }
 
 
@@ -196,49 +202,40 @@ variable "security_rule" {
 ####################                #key            #########################
 #############################################################################
 variable "vm_private_key" {
-  type    = string
-  default = ""
+  type        = string
+  description = "virtual machine private key"
+  default     = ""
 }
 
 variable "vm_public_key" {
-  type    = string
-  default = ""
-}
-
-variable "vm_key" {
   type        = string
-  description = "vm-key"
+  description = "virtual machine public key"
   default     = ""
 }
 
-variable "vm_key_name" {
-  type        = string
-  description = "vm-name"
-  default     = ""
-}
 
-variable "key_vault_name" {
-  type = string
-}
+# variable "key_vault_name" {
+#   type = string
+# }
 
-variable "keyvault_vm_secret" {
-  type = string
-}
+# variable "keyvault_vm_secret" {
+#   type = string
+# }
 
 
 #############################################################################
 ####################          ansible           #########################
 #############################################################################
-variable "vm_packages" {
-  type    = list(string)
-  default = [""]
+variable "ansible_required" {
+  type        = bool
+  description = "ansible required? accepted values are true or false"
+  default     = false
 }
 
-
-variable "private_key" {
-  type        = string
-  description = "key"
-  #default     = "./vm-key.pem"
+variable "vm_packages" {
+  type        = list(string)
+  description = "required packges needed for vm"
+  default     = [""]
 }
 
 variable "client_id" {
@@ -266,74 +263,97 @@ variable "subscription_id" {
 }
 
 variable "storage_account_name" {
-  type = string
+  type        = string
+  description = "storage account name where the packages are uploaded"
+  default     = ""
 }
 
 variable "container_name" {
-  type = string
-}
-
-
-variable "zookeeper_host_name" {
-  type = string
-}
-
-variable "elasticsearch_host_name" {
-  type = string
+  type        = string
+  description = "conatiner name"
+  default     = ""
 }
 
 variable "playbooks" {
-  type = list(string)
+  type        = list(string)
+  description = "list of playbooks to be executed by ansible script"
+  default     = [""]
 }
 
-
-variable "managed_disk_required" {
-  type    = bool
-  default = false
+variable "zookeeper_host_name" {
+  type        = string
+  description = "zookeeper host name"
+  default     = ""
 }
 
-
+variable "elasticsearch_host_name" {
+  type        = string
+  description = "elasticsearch host name"
+  default     = ""
+}
 #############################################################################
 ####################        #backup       #########################
 #############################################################################
 
 variable "vm_backup_required" {
-  type = bool
+  type        = bool
+  description = "virtual machine backup required accepted values are true or false"
+  default     = false
 }
 
+#service vault
 variable "recovery_services_vault_name" {
-  type = string
+  type        = string
+  description = "recovery service vault name"
+  default     = ""
 }
 
 variable "recovery_services_vault_sku" {
-  type = string
+  type        = string
+  description = "recovery service vault sku"
+  default     = ""
 }
 
 variable "soft_delete_enabled" {
-  type = string
+  type        = bool
+  description = "is soft delete enabled or not"
+  default     = true
 }
 
+#backup policy
 variable "vm_backup_policy_name" {
-  type = string
+  type        = string
+  description = "vm backup policy name"
+  default     = ""
 }
 
 variable "time_zone" {
-  type = string
+  type        = string
+  description = "time zone default to UTC"
+  default     = ""
 }
 
 variable "instant_restore_retention_days" {
-  type = string
+  type        = string
+  description = "instant restore retention range in days"
+  default     = ""
 }
 
 variable "backup_frequency" {
-  type = string
+  type        = string
+  description = "backup frequency Must be either Daily or Weekly"
+  default     = ""
 }
 
 variable "backup_time" {
-  type = string
+  type        = string
+  description = "time of day to perform the backup in 24hour format."
+  default     = ""
 }
 
 variable "retention_daily_count" {
-  type = string
+  type        = string
+  description = "The number of daily backups to keep. Must be between 7 and 9999."
+  default     = ""
 }
 

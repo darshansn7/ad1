@@ -22,7 +22,3 @@ output "virtual_machine_admin_username" {
   description = "virtual machine admin user name"
   value       = azurerm_linux_virtual_machine.linux_vm.admin_username
 }
-
-output "virtual_machine_admin_password_secret" {
-  value = azurerm_key_vault_secret.push_vm_passowrd.name
-}

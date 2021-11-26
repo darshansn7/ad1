@@ -1,8 +1,8 @@
 ---
 - hosts: all
   strategy: debug
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
   become_method: sudo
   vars_files:
     - vars.yml

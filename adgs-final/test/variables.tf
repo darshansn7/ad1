@@ -82,6 +82,36 @@ variable "purpose" {
   default = "AIP"
 }
 
+
+variable "security_rule" {
+  description = "security rules for the network security group"
+  type = set(object(
+    {
+      name                       = string
+      priority                   = number
+      direction                  = string
+      access                     = string
+      protocol                   = string
+      source_port_range          = string
+      destination_port_range     = string
+      source_address_prefix      = string
+      destination_address_prefix = string
+    }
+  ))
+  default = [{
+    name                       = "zookeeper"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "2181"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+
+  }]
+}
+
 variable "managed_disk_config" {
   type = set(object(
     {

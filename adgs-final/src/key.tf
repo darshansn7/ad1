@@ -64,7 +64,7 @@ resource "azurerm_ssh_public_key" "main" {
 # resource "azurerm_key_vault_secret" "public_key" {
 #   count        = var.vm_public_key == "" ? 1 : 0
 #   name         = local.vm_name
-#   value        = base64encode(local.private_key)
+#   value        = base64encode(local.public_key)
 #   key_vault_id = data.azurerm_key_vault.main.id
 #   depends_on   = [null_resource.create_key_file, azurerm_linux_virtual_machine.linux_vm]
 # }

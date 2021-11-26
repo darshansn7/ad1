@@ -1,0 +1,6 @@
+[default]
+10.0.0.1
+[default:vars]
+ansible_user=aipuser1
+ansible_password=abcd
+ansible_sudo_pass=abcd

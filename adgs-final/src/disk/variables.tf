@@ -1,18 +1,21 @@
-
 variable "virtual_machine_name" {
-  type = string
+  type        = string
+  description = "virtual machine name"
 }
 
 variable "vm_rg" {
-  type = string
+  type        = string
+  description = "virtual machine resource group"
 }
 
 variable "rg_location" {
-  type = string
+  type        = string
+  description = "resource group location"
 }
 
 variable "virtual_machine_id" {
-  type = string
+  type        = string
+  description = "virtual machine id"
 }
 
 variable "common_tags" {
@@ -21,6 +24,7 @@ variable "common_tags" {
 }
 
 variable "managed_disk_config" {
+  description = "disk configuration details"
   type = set(object(
     {
       name                 = string

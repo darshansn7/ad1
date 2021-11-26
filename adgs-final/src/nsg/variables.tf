@@ -1,21 +1,25 @@
-
 variable "vm_rg" {
-  type = string
+  type        = string
+  description = "virtual machine resource group"
 }
 
 variable "rg_location" {
-  type = string
+  type        = string
+  description = "resource group location"
 }
 variable "vnet_name" {
-  type = string
+  type        = string
+  description = "virtual network name"
 }
 
 variable "subnet_name" {
-  type = string
+  type        = string
+  description = "subnet name"
 }
 
 variable "network_security_group_name" {
-  type = string
+  type        = string
+  description = "network security group name"
 }
 
 

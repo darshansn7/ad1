@@ -34,11 +34,6 @@ module "vm1" {
   vm_computer_name                = "aipuser1"
   vm_admin_username               = "aipuser1"
 
-  #key-vault
-  vm_key_name        = local.vm1_key_name
-  key_vault_name     = "adgsvmdeployment"
-  keyvault_vm_secret = local.vm1_keyvault_vm_secret
-
   managed_disk_required = true
   managed_disk_config   = var.managed_disk_config
 
@@ -53,7 +48,6 @@ module "vm1" {
   playbooks               = ["java.yml", "zk-install.yml"]
   zookeeper_host_name     = ""
   elasticsearch_host_name = ""
-  private_key             = ""
   client_id               = var.client_id
   client_secret           = var.client_secret
   tenant_id               = var.tenant_id
@@ -102,21 +96,16 @@ module "vm2" {
   vm_os_disk_name                 = "osdisk"
   vm_os_disk_caching              = "ReadWrite"
   vm_os_disk_storage_account_type = "Standard_LRS"
-  vm_computer_name                = "aipuser1"
-  vm_admin_username               = "aipuser1"
+  vm_computer_name                = "aipuser2"
+  vm_admin_username               = "aipuser2"
 
-  #key-vault
-  vm_key_name        = local.vm2_key_name
-  key_vault_name     = "adgsvmdeployment"
-  keyvault_vm_secret = local.vm2_keyvault_vm_secret
 
   #ansible
   ansible_required        = true
-  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
-  playbooks               = ["java.yml", "zk-install.yml"]
-  zookeeper_host_name     = ""
+  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "elasticsearch-7.2.1-x86_64.rpm", "Saga_Server.zip"]
+  playbooks               = ["java.yml", "elastic-install.yml", "saga-install.yml"]
+  zookeeper_host_name     = module.vm1.virtual_machine_admin_username
   elasticsearch_host_name = ""
-  private_key             = ""
   client_id               = var.client_id
   client_secret           = var.client_secret
   tenant_id               = var.tenant_id
@@ -166,21 +155,16 @@ module "vm3" {
   vm_os_disk_name                 = "osdisk"
   vm_os_disk_caching              = "ReadWrite"
   vm_os_disk_storage_account_type = "Standard_LRS"
-  vm_computer_name                = "aipuser1"
-  vm_admin_username               = "aipuser1"
+  vm_computer_name                = "aipuser3"
+  vm_admin_username               = "aipuser3"
 
-  #key-vault
-  vm_key_name        = local.vm3_key_name
-  key_vault_name     = "adgsvmdeployment"
-  keyvault_vm_secret = local.vm3_keyvault_vm_secret
 
   #ansible
   ansible_required        = true
-  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
-  playbooks               = ["java.yml", "zk-install.yml"]
-  zookeeper_host_name     = ""
-  elasticsearch_host_name = ""
-  private_key             = ""
+  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "python-lxml-3.2.1-4.el7.x86_64.rpm", "aspire-4.0-SNAPSHOT.tar.gz"]
+  playbooks               = ["java.yml", "aspire-master-install.yml"]
+  zookeeper_host_name     = module.vm1.virtual_machine_admin_username
+  elasticsearch_host_name = module.vm2.virtual_machine_admin_username
   client_id               = var.client_id
   client_secret           = var.client_secret
   tenant_id               = var.tenant_id
@@ -230,21 +214,16 @@ module "vm4" {
   vm_os_disk_name                 = "osdisk"
   vm_os_disk_caching              = "ReadWrite"
   vm_os_disk_storage_account_type = "Standard_LRS"
-  vm_computer_name                = "aipuser1"
-  vm_admin_username               = "aipuser1"
+  vm_computer_name                = "aipuser4"
+  vm_admin_username               = "aipuser4"
 
-  #key-vault
-  vm_key_name        = local.vm4_key_name
-  key_vault_name     = "adgsvmdeployment"
-  keyvault_vm_secret = local.vm4_keyvault_vm_secret
 
   #ansible
   ansible_required        = true
-  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
-  playbooks               = ["java.yml", "zk-install.yml"]
-  zookeeper_host_name     = ""
-  elasticsearch_host_name = ""
-  private_key             = ""
+  vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "python-lxml-3.2.1-4.el7.x86_64.rpm", "aspire-4.0-SNAPSHOT.tar.gz"]
+  playbooks               = ["java.yml", "aspire-worker-install.yml"]
+  zookeeper_host_name     = module.vm1.virtual_machine_admin_username
+  elasticsearch_host_name = module.vm2.virtual_machine_admin_username
   client_id               = var.client_id
   client_secret           = var.client_secret
   tenant_id               = var.tenant_id

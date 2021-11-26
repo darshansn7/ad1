@@ -109,6 +109,30 @@ variable "security_rule" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
 
+  },
+  {
+    name                       = "elasticsearch"
+    priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "9200"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+
+  },
+  {
+    name                       = "aspire"
+    priority                   = 102
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "50505"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+
   }]
 }
 

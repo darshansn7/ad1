@@ -42,7 +42,7 @@ resource "azurerm_linux_virtual_machine" "linux_vm" {
   disable_password_authentication = false
   custom_data                     = var.custom_data
   tags                            = var.common_tags
-  depends_on = [module.network_security_group]
+  depends_on                      = [module.network_security_group]
 }
 
 module "network_security_group" {
@@ -68,22 +68,39 @@ module "disk" {
   depends_on           = [azurerm_linux_virtual_machine.linux_vm]
 }
 
+
+module "vm_backup" {
+  source                         = "./backup"
+  count                          = var.vm_backup_required == true ? 1 : 0
+  recovery_services_vault_name   = var.recovery_services_vault_name
+  rg_location                    = var.rg_location
+  vm_rg                          = var.vm_rg
+  recovery_services_vault_sku    = var.recovery_services_vault_sku
+  soft_delete_enabled            = var.soft_delete_enabled
+  vm_backup_policy_name          = var.vm_backup_policy_name
+  time_zone                      = var.time_zone
+  instant_restore_retention_days = var.instant_restore_retention_days
+  backup_frequency               = var.backup_frequency
+  backup_time                    = var.backup_time
+  retention_daily_count          = var.retention_daily_count
+}
 module "ansible" {
-  source                = "./ansibletf"
-  count                 = var.ansible_required == true ? 1 : 0
-  vm_private_ip_address = azurerm_linux_virtual_machine.linux_vm.private_ip_address
-  vm_admin_username     = var.vm_admin_username
-  vm_password           = sensitive(random_password.password.result)
-  vm_packages           = var.vm_packages
-  client_id             = var.client_id
-  client_secret         = var.client_secret
-  tenant_id             = var.tenant_id
-  subscription_id       = var.subscription_id
-  storage_account_name  = var.storage_account_name
-  container_name        = var.container_name
-  zookeeper_host_name  = var.zookeeper_host_name
+  source                  = "./ansibletf"
+  count                   = var.ansible_required == true ? 1 : 0
+  vm_private_ip_address   = azurerm_linux_virtual_machine.linux_vm.private_ip_address
+  vm_admin_username       = var.vm_admin_username
+  vm_password             = sensitive(random_password.password.result)
+  vm_packages             = var.vm_packages
+  client_id               = var.client_id
+  client_secret           = var.client_secret
+  tenant_id               = var.tenant_id
+  subscription_id         = var.subscription_id
+  storage_account_name    = var.storage_account_name
+  container_name          = var.container_name
+  zookeeper_host_name     = var.zookeeper_host_name
   elasticsearch_host_name = var.elasticsearch_host_name
-  playbooks = var.playbooks
+  playbooks               = var.playbooks
+  depends_on              = [azurerm_linux_virtual_machine.linux_vm, module.disk]
 }
 
 variable "ansible_required" {

@@ -12,7 +12,7 @@ module "vm1" {
   vm_rg       = "aianoaddarrsg01"
   rg_location = "eastus2"
   vnet_name   = "aianoaddapvpc01"
-  subnet_name = "aianoaddaspvt01"
+  subnet_name = "aianoaddazays01"
 
   #nic
   nic_name                          = local.vm1_nic_name
@@ -38,16 +38,16 @@ module "vm1" {
   vm_computer_name                = "aipuser1"
   vm_admin_username               = "aipuser1"
 
-  managed_disk_required           = false
-  managed_disk_config             = var.managed_disk_config
+  managed_disk_required = true
+  managed_disk_config   = var.managed_disk_config
 
-  network_security_group_required = false
-  network_security_group_name = local.network_security_group_name
-  security_rule = var.security_rule
+  network_security_group_required = true
+  network_security_group_name     = local.network_security_group_name
+  security_rule                   = var.security_rule
 
 
   #ansible
-    ansible_required                = true
+  ansible_required        = false
   vm_packages             = ["jdk-11.0.12_linux-x64_bin.rpm", "apache-zookeeper-3.5.6-bin.tar.gz"]
   playbooks               = ["java.yml", "zk-install.yml"]
   zookeeper_host_name     = ""
@@ -63,6 +63,7 @@ module "vm1" {
   common_tags             = local.common_tags
 
   #vm backup
+  vm_backup_required           = true
   recovery_services_vault_name = local.recovery_services_vault_name
   recovery_services_vault_sku  = "Standard"
   vm_backup_policy_name        = local.vm_backup_policy_name

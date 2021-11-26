@@ -169,7 +169,7 @@ variable "network_security_group_required" {
 }
 
 variable "network_security_group_name" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -295,6 +295,10 @@ variable "managed_disk_required" {
 
 
 #backup
+variable "vm_backup_required" {
+  type = bool
+}
+
 variable "recovery_services_vault_name" {
   type = string
 }

@@ -16,9 +16,9 @@ resource "null_resource" "azcli" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i ${path.module}/inventory/hosts ${path.module}/azcli.yml"
+    command = "ansible-playbook -i ${path.module}/inventory/hosts ${path.module}/playbooks/azcli.yml"
   }
-  depends_on = [null_resource.packages_download, local_file.update_vars_yaml, local_file.playbooks,local_file.hosts ]
+  depends_on = [ local_file.update_vars_yaml, local_file.playbooks,local_file.hosts ]
 }
 
 
@@ -62,7 +62,7 @@ resource "null_resource" "install_package" {
   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i hosts ${path.module}/main.yml"
+    command = "ansible-playbook -i hosts ${path.module}/playbooks/main.yml"
   }
   depends_on = [null_resource.packages_download, local_file.update_vars_yaml, local_file.playbooks]
 }

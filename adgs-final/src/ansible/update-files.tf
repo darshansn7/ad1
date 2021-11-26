@@ -14,7 +14,7 @@ EOF
 
 resource "local_file" "update_vars_yaml" {
   content  = data.template_file.vars_yaml.template
-  filename = "${path.module}/vars.yml"
+  filename = "${path.module}/playbooks/vars.yml"
 }
 
 
@@ -36,7 +36,7 @@ EOF
 
 
 resource "local_file" "playbooks" {
-  filename = "${path.module}/main.yml"
+  filename = "${path.module}/playbooks/main.yml"
   content  = data.template_file.playbooks.template
 }
 
@@ -50,6 +50,7 @@ ${var.vm_private_ip_address}
 [default:vars]
 ansible_user=${var.vm_admin_username}
 ansible_password=${var.vm_password}
+ansible_sudo_pass=${var.vm_password}
 EOF
 }
 

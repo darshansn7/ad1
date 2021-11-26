@@ -5,6 +5,7 @@ provider "azurerm" {
   client_secret   = "vJz7Q~pzeBlXnm2-zmuCIzkQc~Y-vdeCpyRa0"
   subscription_id = "ed8fd191-c919-4c7f-8760-175cdb464f79"
 }
+
 module "vm1" {
   source = "./../src"
 
